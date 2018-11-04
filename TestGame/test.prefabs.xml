@@ -1,0 +1,22 @@
+<map>
+    <name>Hello world map</name>
+    <gameobjects>
+        <obj>
+            <name>Test Object</name>
+            <behavior>0</behavior>
+            <attributes></attributes>
+        </obj>
+        
+        <obj>
+            <name>Thing</name>
+            <behavior>2</behavior>
+            <attributes>
+                <attr>
+                    <type>vec3</type>
+                    <value>0, 2, 0</value>
+                    <symbol>position</symbol>
+                </attr>
+            </attributes>
+        </obj>
+    </gameobjects>
+</map>

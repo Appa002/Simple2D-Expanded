@@ -1,0 +1,41 @@
+<map>
+    <name>Hello world map</name>
+    <gameobjects>
+        <obj>
+            <name>Test Object</name>
+            <behavior>0</behavior>
+            <attributes></attributes>
+        </obj>
+        
+        <obj>
+            <name>Thing</name>
+            <behavior>2</behavior>
+            <attributes>
+                <attr>
+                    <type>vec3</type>
+                    <value>0, 2, 0</value>
+                    <symbol>position</symbol>
+                </attr>
+            </attributes>
+        </obj>
+
+            
+        <obj>
+            <name>Camera</name>
+            <behavior>1</behavior>
+            <attributes>
+                <attr>
+                    <type>vec3</type>
+                    <value>0,0,0</value>
+                    <symbol>position</symbol>
+                </attr>
+            
+                <attr>
+                    <type>vec3</type>
+                    <value>0.4, 0.4, 0.4</value>
+                    <symbol>scale</symbol>
+                </attr>
+            </attributes>
+        </obj>
+    </gameobjects>
+</map>
