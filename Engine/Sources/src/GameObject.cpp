@@ -135,27 +135,16 @@ void Simple2D::GameObject::render(GLuint shaderProgramme) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(0);
 
-
-    // Copy Sprite into opengl texture
-    GLuint tex = 0;
-    glGenTextures(1, &tex);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *spriteWidth, *spriteHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+     glBindTexture(GL_TEXTURE_2D, texture);
 
     GLfloat texcoords[]{
-            0.0f, 1.0f,
             0.0f, 0.0f,
-            1.0f, 0.0f,
-
             0.0f, 1.0f,
             1.0f, 1.0f,
-            1.0f, 0.0f
+
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f
     };
 
     GLuint vtVbo;
@@ -199,24 +188,16 @@ void Simple2D::GameObject::loadNewSprite(std::string path) {
         printf("[WARNING] Dimensions not a power of two for GameObject \"%s\" \n", name.c_str());
     }
 
-    // Filp Images upside down
-    int widthInBytes = 4 * *spriteWidth;
-    unsigned char* top = nullptr;
-    unsigned char* bottom = nullptr;
-    unsigned char tmp = 0;
-    int halfHeight = *spriteHeight / 2;
-
-    for(int row = 0; row < halfHeight; row++){
-        top = imageData + row * widthInBytes;
-        bottom = imageData + (*spriteHeight - row - 1) * widthInBytes;
-        for(int col = 0; col < widthInBytes; col++){
-            tmp = *top;
-            *top = *bottom;
-            *bottom = tmp;
-            top++;
-            bottom++;
-        }
-    }
+    // Copy Sprite into opengl texture
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *spriteWidth, *spriteHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 }
 
 void Simple2D::GameObject::remove() {

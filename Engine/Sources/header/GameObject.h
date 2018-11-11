@@ -23,6 +23,7 @@ namespace Simple2D{
         unsigned char* imageData;
         GLuint* vao;
         bool markedForDeletion = false;
+        GLuint texture;
 
     public:
         GameObject();
