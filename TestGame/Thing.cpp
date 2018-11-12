@@ -8,7 +8,7 @@ bool up = true;
 
 void Thing::setup()
 {
-    findGameObject(this)->loadNewSprite("./square.png");
+    findGameObject(this)->loadNewSprite("./4k.jpg");
 
 }
 
@@ -22,10 +22,10 @@ void Thing::update(long deltaTime)
         this->offset += 0.01;
 
 
-    Ui::changeTextColour("", 255 - i, 255 + i, 255 - i);
-    Simple2D::Ui::createText("Current FPS: " + std::to_string(1000 / deltaTime) + " hz", vec3(-0.95f, 0.8f, 0), vec3(0.02f, 0.02f, 0.02f));
 
-    std::cout << 255 - i / 10 << std::endl;
+    Ui::changeTextColour("", 255 - i, 255 + i, 255 - i);
+    Simple2D::Ui::createText("M", vec3(-0.95f, 0.8f, 0), vec3(0.02f, 0.02f, 0.02f), 0.4f);
+    
 
     if(up) i++;
     else i--;

@@ -42,5 +42,4 @@ void Camera::onRemoval()
 }
 
 void Camera::onEvent(SDL_Event & e)
-{
-}
+{}

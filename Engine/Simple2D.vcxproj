@@ -72,7 +72,7 @@
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
@@ -145,6 +145,17 @@
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>glew32.lib;SDL2.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\MSVC Libraries\freetype-2.9.1\objs\x64\Release Static;C:\MSVC Libraries\freetype-2.9.1;C:\MSVC Libraries\SDL\lib\x64\;C:\MSVC Libraries\Glew\lib\Release\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\MSVC Libraries\rapidxml;C:\MSVC Libraries\SDL\include;C:\MSVC Libraries\Glew\include;C:\MSVC Libraries\stbi\include;C:\MSVC Libraries\freetype-2.9.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>WIN64</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>glew32.lib;SDL2.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
