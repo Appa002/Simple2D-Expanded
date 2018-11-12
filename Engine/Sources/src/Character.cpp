@@ -10,7 +10,7 @@
 
 Simple2D::Character::Character(char c)
 {
-    const unsigned int FONT_RESOLUTION = 64;
+    const unsigned int FONT_RESOLUTION = 1024;
 
     FT_Library  library;   /* handle to library     */
     FT_Face     face;      /* handle to face object */
@@ -37,26 +37,7 @@ Simple2D::Character::Character(char c)
     error = FT_Set_Pixel_Sizes(face, 0, FONT_RESOLUTION);
     error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
     error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-    
-    // Filp Images upside down
-    int widthInBytes = 1 * face->glyph->bitmap.width;
-    unsigned char* top = nullptr;
-    unsigned char* bottom = nullptr;
-    unsigned char tmp = 0;
-    int halfHeight = face->glyph->bitmap.rows / 2;
-
-    for (int row = 0; row < halfHeight; row++) {
-        top = face->glyph->bitmap.buffer + row * widthInBytes;
-        bottom = face->glyph->bitmap.buffer + (face->glyph->bitmap.rows - row - 1) * widthInBytes;
-        for (int col = 0; col < widthInBytes; col++) {
-            tmp = *top;
-            *top = *bottom;
-            *bottom = tmp;
-            top++;
-            bottom++;
-        }
-    }
-
+   
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // Load into opengl texture....
@@ -64,12 +45,12 @@ Simple2D::Character::Character(char c)
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     // Set remaining parameter
     advance = vec2(face->glyph->advance.x, face->glyph->advance.y);
     bearing = vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
