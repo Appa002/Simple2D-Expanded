@@ -5,10 +5,62 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+void Simple2D::GameObject::setupOpenglBuffer()
+{
+    glDeleteBuffers(1, posVbo);
+    glDeleteBuffers(1, vtVbo);
+    glDeleteBuffers(1, vao);
+
+    glGenBuffers(1, posVbo);
+    glGenBuffers(1, vtVbo);
+    glGenVertexArrays(1, vao);
+
+    GLfloat pos[]{
+            -1.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+
+            -1.0f, 1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, *posVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
+
+    GLfloat texcoords[]{
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, *vtVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+
+
+    glBindVertexArray(*vao);
+    glBindBuffer(GL_ARRAY_BUFFER, *posVbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(*vao);
+    glBindBuffer(GL_ARRAY_BUFFER, *vtVbo);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(1);
+
+
+}
+
 Simple2D::GameObject::GameObject() {
     spriteHeight = new int(0);
     spriteWidth = new int(0);
     vao = new GLuint(0);
+    posVbo = new GLuint(0);
+    vtVbo = new GLuint(0);
 }
 
 Simple2D::GameObject::~GameObject() {
@@ -16,9 +68,15 @@ Simple2D::GameObject::~GameObject() {
         printf("[WARNING] Not all attributes of GameObject \"%s\"'s behavior have been removed. This causes a memory leak.\n", this->name.c_str());
     }
 
+    glDeleteBuffers(1, posVbo);
+    glDeleteBuffers(1, vtVbo);
+    glDeleteBuffers(1, vao);
+
     delete spriteHeight;
     delete spriteWidth;
     delete vao;
+    delete vtVbo;
+    delete posVbo;
     delete behavior;
 }
 
@@ -114,50 +172,7 @@ void Simple2D::GameObject::render(GLuint shaderProgramme) {
             glUniform3fv(loc, 1, data);
         }
     }
-
-    GLfloat pos[]{
-            -1.0f, 1.0f, 0.0f,
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-
-            -1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f
-    };
-
-    GLuint posVbo;
-    glGenBuffers(1, &posVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, posVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
-
-    glBindVertexArray(*vao);
-    glBindBuffer(GL_ARRAY_BUFFER, posVbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
-
-     glBindTexture(GL_TEXTURE_2D, texture);
-
-    GLfloat texcoords[]{
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f
-    };
-
-    GLuint vtVbo;
-    glGenBuffers(1, &vtVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vtVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-
-    glBindVertexArray(*vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vtVbo);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(1);
-
-
+    glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(*vao);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -174,7 +189,8 @@ Simple2D::GameObject *Simple2D::GameObject::findOtherGameObject(std::string name
 }
 
 void Simple2D::GameObject::loadNewSprite(std::string path) {
-    glGenVertexArrays(1, vao);
+    setupOpenglBuffer();
+
     int n;
     imageData = stbi_load(path.c_str(), spriteWidth, spriteHeight, &n, 4);
 
@@ -198,6 +214,8 @@ void Simple2D::GameObject::loadNewSprite(std::string path) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+    delete imageData;
 }
 
 void Simple2D::GameObject::remove() {

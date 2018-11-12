@@ -21,10 +21,13 @@ namespace Simple2D{
         int* spriteWidth;
         int* spriteHeight;
         unsigned char* imageData;
-        GLuint* vao;
         bool markedForDeletion = false;
         GLuint texture;
+        GLuint* posVbo;
+        GLuint* vao;
+        GLuint* vtVbo;
 
+        void setupOpenglBuffer();
     public:
         GameObject();
         ~GameObject();
