@@ -7,13 +7,14 @@ void Simple2D::UiManager::init()
     createShader();
     loadFont();
     //loadBmpFont("Courier New", "./Courier_New.bmp", 16, 8, 32, 32);
+
+  
 }
 
 void Simple2D::UiManager::renderAll()
 {
     for (auto& element : elements) {
         element->render(shaderProgramme);
-        delete element; //FIXME: This is dumb as memory for the characters will need to be reallocated.
     }
     this->elements.clear();
 
@@ -56,6 +57,28 @@ void Simple2D::UiManager::loadBmpFont(std::string name, std::string path, size_t
      //       fonts[name].push_back(data);
         }
     }
+
+
+    //for (auto& letter : fonts[name]) {
+    //    // Filp Images upside down
+    //    int widthInBytes = 4 * cellWidth;
+    //    unsigned char* top = nullptr;
+    //    unsigned char* bottom = nullptr;
+    //    unsigned char tmp = 0;
+    //    int halfHeight = cellHeight / 2;
+
+    //    for (int row = 0; row < halfHeight; row++) {
+    //        top = letter + row * widthInBytes;
+    //        bottom = letter + (32 - row - 1) * widthInBytes;
+    //        for (int col = 0; col < widthInBytes; col++) {
+    //            tmp = *top;
+    //            *top = *bottom;
+    //            *bottom = tmp;
+    //            top++;
+    //            bottom++;
+    //        }
+    //    }
+    //}
 }
 
 
@@ -113,7 +136,8 @@ uniform vec3 textColour;
 out vec4 fragment_color;
 
 void main(){
-    vec4 texel = vec4(texture(basic_texture, texture_coordinates).r, 0, 0, 1);
+    vec4 texel = vec4(textColour.x, textColour.y, textColour.z, 
+texture(basic_texture, texture_coordinates).r);
     fragment_color = texel;
 }
 
