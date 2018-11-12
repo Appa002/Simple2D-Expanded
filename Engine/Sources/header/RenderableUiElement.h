@@ -13,9 +13,13 @@ namespace Simple2D {
         vec3 pos;
         vec3 scale;
         GLuint* vao;
+        GLuint* vtVbo;
+        GLuint* posVbo;
         GLuint texture;
         bool loaded = false;
         vec3 activeColour = vec3(255, 255, 255);
+
+        void setupOpenglBuffer();
 
     public:
         RenderableUiElement();

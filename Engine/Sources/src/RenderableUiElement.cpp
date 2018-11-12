@@ -3,15 +3,70 @@
 #include <iostream>
 
 
+void Simple2D::RenderableUiElement::setupOpenglBuffer()
+{
+    glDeleteBuffers(1, posVbo);
+    glDeleteBuffers(1, vtVbo);
+    glDeleteBuffers(1, vao);
+
+    glGenBuffers(1, posVbo);
+    glGenBuffers(1, vtVbo);
+    glGenVertexArrays(1, vao);
+
+    GLfloat pos[]{
+            -1.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+
+            -1.0f, 1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, *posVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
+
+    GLfloat texcoords[]{
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, *vtVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+
+
+    glBindVertexArray(*vao);
+    glBindBuffer(GL_ARRAY_BUFFER, *posVbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(*vao);
+    glBindBuffer(GL_ARRAY_BUFFER, *vtVbo);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(1);
+}
+
 Simple2D::RenderableUiElement::RenderableUiElement()
 {
     vao = new GLuint(0);
+    vtVbo = new GLuint(0);
+    posVbo = new GLuint(0);
 }
 
 
 Simple2D::RenderableUiElement::~RenderableUiElement()
 {
+    glDeleteBuffers(1, posVbo);
+    glDeleteBuffers(1, vtVbo);
+    glDeleteBuffers(1, vao);
     delete vao;
+    delete vtVbo;
+    delete posVbo;
 }
 
 void Simple2D::RenderableUiElement::render(GLuint shaderProgramme)
@@ -56,49 +111,7 @@ void Simple2D::RenderableUiElement::render(GLuint shaderProgramme)
         glUniform3fv(loc, 1, data);
     }
 
-    GLfloat pos[]{
-            -1.0f, 1.0f, 0.0f,
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-
-            -1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f
-    };
-
-    GLuint posVbo;
-    glGenBuffers(1, &posVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, posVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
-
-    glBindVertexArray(*vao);
-    glBindBuffer(GL_ARRAY_BUFFER, posVbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
-
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-
-    GLfloat texcoords[]{
-            0.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f
-    };
-
-    GLuint vtVbo;
-    glGenBuffers(1, &vtVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vtVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-
-    glBindVertexArray(*vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vtVbo);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(1);
-
 
     glBindVertexArray(*vao);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -145,7 +158,7 @@ void Simple2D::RenderableUiElement::loadImage(std::string path)
 
 void Simple2D::RenderableUiElement::loadImageData(GLuint texture)
 {
-    glGenVertexArrays(1, vao);
+    setupOpenglBuffer();
     this->texture = texture;
     this->loaded = true;
 
