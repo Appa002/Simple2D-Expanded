@@ -63,7 +63,13 @@ namespace Simple2D{
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        Globals::window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, resX, resY, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        Globals::window = SDL_CreateWindow(name.c_str(),
+            SDL_WINDOWPOS_UNDEFINED, 
+            SDL_WINDOWPOS_UNDEFINED, 
+            resX, 
+            resY,
+            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+
         SDL_GLContext context = SDL_GL_CreateContext(Globals::window);
         SDL_SetWindowResizable(Globals::window, SDL_TRUE);
 
@@ -83,7 +89,6 @@ namespace Simple2D{
 
         glEnable(GL_DEPTH);
         glDepthFunc(GL_LESS);
-
 
         const char* tmp;
 
@@ -129,7 +134,6 @@ namespace Simple2D{
         glClearColor(0.3f, 0.3f, 0.3f, 0);
 
         Simple2D::UiManager::get()->init();
-
         return 0;
     }
 
@@ -137,7 +141,6 @@ namespace Simple2D{
         SDL_Event event;
         bool bQuit = false;
         while (!bQuit) {
-
             while (SDL_PollEvent(&event) != 0) {
                 if (event.type == SDL_QUIT) {
                     if(Simple2D::MapManager::get()->getCurrentMap())
