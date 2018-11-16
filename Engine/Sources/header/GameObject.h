@@ -18,16 +18,10 @@
 namespace Simple2D{
     class  GameObject {
     private:
-        int* spriteWidth;
-        int* spriteHeight;
-        unsigned char* imageData;
-        bool markedForDeletion = false;
         GLuint texture;
-        GLuint* posVbo;
-        GLuint* vao;
-        GLuint* vtVbo;
+        bool hasTextureLoaded = false;
+        bool markedForDeletion = false;
 
-        void setupOpenglBuffer();
     public:
         GameObject();
         ~GameObject();
@@ -36,13 +30,12 @@ namespace Simple2D{
         std::string name;
         int behaviorIdx;
 
+        const GLuint& getTexture() const;
+        const bool& shallRender() const;
         bool isMarkedForDeletion();
-        void render(GLuint shaderProgramme);
+        
         void loadNewSprite(std::string path);
         void remove();
-
-    private:
-        GameObject* findOtherGameObject(std::string name);
     };
 }
 #endif //SIMPLE2DENGINE_GAMEOBJECT_H
