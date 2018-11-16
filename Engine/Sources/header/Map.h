@@ -36,7 +36,7 @@ namespace Simple2D{
         void setupAll();
         void fixedUpdateAll();
         void eventHandelAll(SDL_Event e);
-        void renderAll(GLuint shaderProgramme);
+        void renderAll();
         std::string getName();
         std::string getPath();
 

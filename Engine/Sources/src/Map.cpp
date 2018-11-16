@@ -4,6 +4,7 @@
 
 #include "../header/Map.h"
 #include "../header/Behavior.h"
+#include "../header/GameObjectRenderer.h"
 
 #include <fstream>
 #include <rapidxml.hpp>
@@ -207,9 +208,10 @@ void Simple2D::Map::updateAll() {
 
 }
 
-void Simple2D::Map::renderAll(GLuint shaderProgramme) {
+void Simple2D::Map::renderAll() {
     for(auto* gameObject : *this->gameObjects){
-        gameObject->render(shaderProgramme);
+     //   gameObject->render(shaderProgramme);
+        GameObjectRenderer::get()->render(*gameObject);
     }
 }
 
