@@ -61,9 +61,10 @@ Simple2D::RenderableUiElement::RenderableUiElement()
 
 Simple2D::RenderableUiElement::~RenderableUiElement()
 {
+    glBindVertexArray(*vao);
     glDeleteBuffers(1, posVbo);
     glDeleteBuffers(1, vtVbo);
-    glDeleteBuffers(1, vao);
+    glDeleteVertexArrays(1, vao);
     delete vao;
     delete vtVbo;
     delete posVbo;
@@ -92,14 +93,15 @@ void Simple2D::RenderableUiElement::render(GLuint shaderProgramme)
         }
     }
 
-    {  GLint loc = glGetUniformLocation(shaderProgramme, "scale");
-    if (loc != -1) {
-        float data[3];
-        data[0] = scale.x;
-        data[1] = scale.y;
-        data[2] = scale.z;
-        glUniform3fv(loc, 1, data);
-    }
+    {
+        GLint loc = glGetUniformLocation(shaderProgramme, "scale");
+        if (loc != -1) {
+            float data[3];
+            data[0] = scale.x;
+            data[1] = scale.y;
+            data[2] = scale.z;
+            glUniform3fv(loc, 1, data);
+        }
     }
 
     GLint loc = glGetUniformLocation(shaderProgramme, "textColour");
