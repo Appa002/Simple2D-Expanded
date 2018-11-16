@@ -113,7 +113,7 @@ uniform vec3 textColour;
 out vec4 fragment_color;
 
 void main(){
-    vec4 texel = vec4(texture(basic_texture, texture_coordinates).r, 0, 0, 1);
+    vec4 texel = vec4(textColour.x, textColour.y, textColour.z, texture(basic_texture, texture_coordinates).r);
     fragment_color = texel;
 }
 
