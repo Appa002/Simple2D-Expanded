@@ -5,9 +5,10 @@
 
 Simple2D::GameObjectRenderer::~GameObjectRenderer()
 {
+    glBindVertexArray(vao);
     glDeleteBuffers(1, &posVbo);
     glDeleteBuffers(1, &vtVbo);
-    glDeleteBuffers(1, &vao);
+    glDeleteVertexArrays(1, &vao);
 }
 
 void Simple2D::GameObjectRenderer::setupOpenglBuffer()
