@@ -99,6 +99,9 @@
       <AdditionalLibraryDirectories>C:\Users\a_mod\Projects\Simple2D-Extended\Engine\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Simple2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,6 +159,9 @@
       <AdditionalLibraryDirectories>C:\Users\a_mod\Projects\Simple2D-Extended\Engine\x64\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>Simple2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sources\src\Camera.cpp" />
