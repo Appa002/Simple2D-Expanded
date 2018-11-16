@@ -25,6 +25,7 @@
     <ClInclude Include="Sources\header\ExpandingMap.h" />
     <ClInclude Include="Sources\header\GameObject.h" />
     <ClInclude Include="Sources\header\Globals.h" />
+    <ClInclude Include="Sources\header\GameObjectRenderer.h" />
     <ClInclude Include="Sources\header\Map.h" />
     <ClInclude Include="Sources\header\MapManager.h" />
     <ClInclude Include="Sources\header\RenderableUiElement.h" />
@@ -36,7 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\src\Character.cpp" />
+    <ClCompile Include="Sources\src\Engine.cpp" />
     <ClCompile Include="Sources\src\GameObject.cpp" />
+    <ClCompile Include="Sources\src\GameObjectRenderer.cpp" />
     <ClCompile Include="Sources\src\Map.cpp" />
     <ClCompile Include="Sources\src\MapManager.cpp" />
     <ClCompile Include="Sources\src\RenderableUiElement.cpp" />
