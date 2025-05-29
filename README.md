@@ -1,4 +1,5 @@
 # Simple2D Extended Edition
+(This was created in 2018 / This is a hobby High School project)
 
 A simple game ""engine"" build based on my original Simple2D engine.
 
